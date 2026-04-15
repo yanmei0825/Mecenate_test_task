@@ -15,18 +15,22 @@ import { colors, spacing, typography } from '../tokens';
 
 const TABS = [
   { key: 'all', label: 'Все' },
-  { key: 'popular', label: 'Популярное' },
-  { key: 'subscriptions', label: 'Подписки' },
+  { key: 'free', label: 'Бесплатное' },
+  { key: 'paid', label: 'Платное' },
 ];
+
+type TabKey = 'all' | 'free' | 'paid';
 
 const FeedScreen: React.FC = observer(() => {
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
-  const [activeTab, setActiveTab] = useState('all');
+  const [activeTab, setActiveTab] = useState<TabKey>('all');
+
+  const tier = activeTab === 'all' ? undefined : activeTab as 'free' | 'paid';
 
   const {
     data, isLoading, isError, refetch,
     isFetching, fetchNextPage, hasNextPage, isFetchingNextPage,
-  } = useFeed();
+  } = useFeed(tier);
 
   const posts = data?.pages.flatMap((p) => p.posts) ?? [];
 
@@ -55,7 +59,7 @@ const FeedScreen: React.FC = observer(() => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.white} />
-      <TabBar tabs={TABS} activeKey={activeTab} onChange={setActiveTab} />
+      <TabBar tabs={TABS} activeKey={activeTab} onChange={(k) => setActiveTab(k as TabKey)} />
       <FlatList
         data={posts}
         keyExtractor={(item) => item.id}

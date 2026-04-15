@@ -48,9 +48,12 @@ export interface CommentsPage {
 
 // ── API calls ──────────────────────────────────────────────────────────────
 
-export const fetchPostsPage = async (cursor?: string): Promise<PostsPage> => {
+export type FeedTier = 'free' | 'paid' | undefined;
+
+export const fetchPostsPage = async (cursor?: string, tier?: FeedTier): Promise<PostsPage> => {
   const params: Record<string, unknown> = { limit: 10 };
   if (cursor) params.cursor = cursor;
+  if (tier) params.tier = tier;
 
   const res = await apiClient.get('/posts', { params });
   return res.data.data as PostsPage;

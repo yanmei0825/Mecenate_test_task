@@ -1,11 +1,11 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { addComment, fetchComments, fetchPostsPage, toggleLike } from './posts';
+import { addComment, fetchComments, fetchPostsPage, toggleLike, FeedTier } from './posts';
 import { feedStore } from '../stores/FeedStore';
 
-export const useFeed = () =>
+export const useFeed = (tier?: FeedTier) =>
   useInfiniteQuery({
-    queryKey: ['feed'],
-    queryFn: ({ pageParam }) => fetchPostsPage(pageParam as string | undefined),
+    queryKey: ['feed', tier],
+    queryFn: ({ pageParam }) => fetchPostsPage(pageParam as string | undefined, tier),
     initialPageParam: undefined as string | undefined,
     getNextPageParam: (last) => (last.hasMore ? last.nextCursor ?? undefined : undefined),
     retry: 2,

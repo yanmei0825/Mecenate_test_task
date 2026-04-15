@@ -29,10 +29,10 @@ npm install
 
 ### 2. Environment variables
 
-Copy `.env` and set your values:
+Copy `.env.example` and fill in your values:
 
 ```bash
-cp .env .env.local
+cp .env.example .env
 ```
 
 | Variable | Description | Default |

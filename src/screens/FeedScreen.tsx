@@ -21,6 +21,9 @@ const TABS = [
 
 type TabKey = 'all' | 'free' | 'paid';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const errorIllustration = require('../../assets/error-illustration.png');
+
 const FeedScreen: React.FC = observer(() => {
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
   const [activeTab, setActiveTab] = useState<TabKey>('all');
@@ -37,6 +40,7 @@ const FeedScreen: React.FC = observer(() => {
   if (isLoading) {
     return (
       <SafeAreaView style={styles.container}>
+        <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
         <View style={styles.centered}>
           <ActivityIndicator size="large" color={colors.primary} />
         </View>
@@ -48,20 +52,9 @@ const FeedScreen: React.FC = observer(() => {
     return (
       <SafeAreaView style={styles.container}>
         <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
-        <View style={styles.errorAuthorRow}>
-          <Image
-            source={{ uri: 'https://i.pravatar.cc/80?img=11' }}
-            style={styles.errorAvatar}
-          />
-          <Text style={styles.errorAuthorName}>Петр Федько</Text>
-        </View>
         <View style={styles.centered}>
-          <Image
-            source={require('../../assets/error-illustration.png')}
-            style={styles.illustration}
-            resizeMode="contain"
-          />
-          <Text style={styles.stateTitle}>Не удалось загрузить публикацию</Text>
+          <Image source={errorIllustration} style={styles.illustration} resizeMode="contain" />
+          <Text style={styles.stateTitle}>Не удалось загрузить публикации</Text>
           <Button label="Повторить" onPress={() => refetch()} style={styles.stateBtn} />
         </View>
       </SafeAreaView>
@@ -96,8 +89,9 @@ const FeedScreen: React.FC = observer(() => {
         }
         ListEmptyComponent={
           <View style={styles.centered}>
-            <Text style={styles.illustration}>📭</Text>
-            <Text style={styles.stateTitle}>Публикаций пока нет</Text>
+            <Image source={errorIllustration} style={styles.illustration} resizeMode="contain" />
+            <Text style={styles.stateTitle}>По какому запросу ничего не найдено</Text>
+            <Button label="На главную" onPress={() => setActiveTab('all')} style={styles.stateBtn} />
           </View>
         }
       />
@@ -110,43 +104,25 @@ export { FeedScreen };
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.background },
-  list: { paddingTop: spacing.md, paddingBottom: spacing.xxxl },
+  list: { paddingTop: spacing.sm, paddingBottom: spacing.xxxl },
   centered: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     padding: spacing.xl,
-  },
-  // Error state
-  errorAuthorRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: spacing.lg,
-    paddingTop: spacing.lg,
-    paddingBottom: spacing.sm,
-    gap: spacing.md,
-  },
-  errorAvatar: {
-    width: 52,
-    height: 52,
-    borderRadius: radii.full,
-  },
-  errorAuthorName: {
-    fontSize: typography.fontSizeLg,
-    fontWeight: typography.fontWeightBold,
-    color: colors.textPrimary,
+    minHeight: 400,
   },
   illustration: {
-    width: 180,
-    height: 180,
-    marginBottom: spacing.xl,
+    width: 160,
+    height: 160,
+    marginBottom: spacing.lg,
   },
   stateTitle: {
-    fontSize: typography.fontSizeLg,
+    fontSize: typography.fontSizeMd,
     fontWeight: typography.fontWeightBold,
     color: colors.textPrimary,
     textAlign: 'center',
-    marginBottom: spacing.xl,
+    marginBottom: spacing.lg,
   },
   stateBtn: {
     width: '100%',

@@ -40,16 +40,16 @@ export const Button: React.FC<ButtonProps> = ({
 
 const styles = StyleSheet.create({
   base: {
-    paddingVertical: spacing.sm + 2,
-    paddingHorizontal: spacing.xl,
+    paddingVertical: spacing.sm,
+    paddingHorizontal: spacing.lg,
     borderRadius: radii.full,
     alignItems: 'center',
     justifyContent: 'center',
-    minHeight: 42,
+    minHeight: 38,
   },
   label: {
     color: colors.white,
-    fontSize: typography.fontSizeMd,
+    fontSize: 13,
     fontWeight: typography.fontWeightBold,
     letterSpacing: 0.2,
   },

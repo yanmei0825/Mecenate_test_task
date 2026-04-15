@@ -2,10 +2,12 @@ import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, ActivityIndicator, ViewStyle } from 'react-native';
 import { colors, spacing, radii, typography } from '../tokens';
 
+type Variant = 'primary' | 'outline' | 'disabled';
+
 interface ButtonProps {
   label: string;
   onPress: () => void;
-  variant?: 'primary' | 'outline' | 'disabled';
+  variant?: Variant;
   loading?: boolean;
   style?: ViewStyle;
 }
@@ -17,35 +19,49 @@ export const Button: React.FC<ButtonProps> = ({
   loading = false,
   style,
 }) => {
-  const isDisabled = variant === 'disabled' || loading;
+  const disabled = variant === 'disabled' || loading;
 
   return (
     <TouchableOpacity
-      style={[styles.base, styles[variant], style]}
+      style={[styles.base, variantStyles[variant], style]}
       onPress={onPress}
-      activeOpacity={0.8}
-      disabled={isDisabled}
+      activeOpacity={0.75}
+      disabled={disabled}
     >
-      {loading ? (
-        <ActivityIndicator color={colors.white} size="small" />
-      ) : (
-        <Text style={[styles.label, variant === 'outline' && styles.labelOutline]}>
-          {label}
-        </Text>
-      )}
+      {loading
+        ? <ActivityIndicator color={colors.white} size="small" />
+        : <Text style={[styles.label, variant === 'outline' && styles.labelOutline, variant === 'disabled' && styles.labelDisabled]}>
+            {label}
+          </Text>
+      }
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   base: {
-    paddingVertical: spacing.md,
+    paddingVertical: spacing.sm + 2,
     paddingHorizontal: spacing.xl,
     borderRadius: radii.md,
     alignItems: 'center',
     justifyContent: 'center',
-    minHeight: 44,
+    minHeight: 42,
   },
+  label: {
+    color: colors.white,
+    fontSize: typography.fontSizeMd,
+    fontWeight: typography.fontWeightBold,
+    letterSpacing: 0.2,
+  },
+  labelOutline: {
+    color: colors.primary,
+  },
+  labelDisabled: {
+    color: colors.white,
+  },
+});
+
+const variantStyles = StyleSheet.create<Record<Variant, object>>({
   primary: {
     backgroundColor: colors.primary,
   },
@@ -56,13 +72,5 @@ const styles = StyleSheet.create({
   },
   disabled: {
     backgroundColor: '#C9A8E8',
-  },
-  label: {
-    color: colors.white,
-    fontSize: typography.fontSizeMd,
-    fontWeight: typography.fontWeightBold,
-  },
-  labelOutline: {
-    color: colors.primary,
   },
 });

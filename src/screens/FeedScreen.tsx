@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import {
   View, FlatList, StyleSheet, RefreshControl,
-  Text, ActivityIndicator, SafeAreaView, StatusBar,
+  Text, ActivityIndicator, StatusBar,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { observer } from 'mobx-react-lite';
 import { useFeed } from '../api/hooks';
 import { Post } from '../api/posts';
@@ -15,14 +16,8 @@ const FeedScreen: React.FC = observer(() => {
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
 
   const {
-    data,
-    isLoading,
-    isError,
-    refetch,
-    isFetching,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
+    data, isLoading, isError, refetch,
+    isFetching, fetchNextPage, hasNextPage, isFetchingNextPage,
   } = useFeed();
 
   const posts = data?.pages.flatMap((p) => p.posts) ?? [];
@@ -52,7 +47,6 @@ const FeedScreen: React.FC = observer(() => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.white} />
-
       <FlatList
         data={posts}
         keyExtractor={(item) => item.id}
@@ -82,7 +76,6 @@ const FeedScreen: React.FC = observer(() => {
           </View>
         }
       />
-
       <CommentSheet post={selectedPost} onClose={() => setSelectedPost(null)} />
     </SafeAreaView>
   );

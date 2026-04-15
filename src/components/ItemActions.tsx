@@ -11,62 +11,61 @@ interface ItemActionsProps {
 }
 
 export const ItemActions: React.FC<ItemActionsProps> = ({
-  likes,
-  comments,
-  liked,
-  onLike,
-  onComment,
-}) => {
-  return (
-    <View style={styles.row}>
-      <TouchableOpacity style={styles.action} onPress={onLike} activeOpacity={0.7}>
-        <View style={[styles.iconWrap, liked && styles.iconWrapActive]}>
-          <Text style={[styles.icon, liked && styles.iconActive]}>♥</Text>
-        </View>
-        <Text style={styles.count}>{likes}</Text>
-      </TouchableOpacity>
+  likes, comments, liked, onLike, onComment,
+}) => (
+  <View style={styles.row}>
+    {/* Like */}
+    <TouchableOpacity style={styles.action} onPress={onLike} activeOpacity={0.7}>
+      <View style={[styles.chip, liked && styles.chipLiked]}>
+        <Text style={[styles.heart, liked && styles.heartActive]}>♥</Text>
+        <Text style={[styles.count, liked && styles.countActive]}>{likes}</Text>
+      </View>
+    </TouchableOpacity>
 
-      <TouchableOpacity style={styles.action} onPress={onComment} activeOpacity={0.7}>
-        <View style={styles.iconWrap}>
-          <Text style={styles.icon}>💬</Text>
-        </View>
+    {/* Comment */}
+    <TouchableOpacity style={styles.action} onPress={onComment} activeOpacity={0.7}>
+      <View style={styles.chip}>
+        <Text style={styles.chatIcon}>💬</Text>
         <Text style={styles.count}>{comments}</Text>
-      </TouchableOpacity>
-    </View>
-  );
-};
+      </View>
+    </TouchableOpacity>
+  </View>
+);
 
 const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
-    gap: spacing.md,
+    gap: spacing.sm,
   },
-  action: {
+  action: {},
+  chip: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.xs,
-  },
-  iconWrap: {
-    width: 28,
-    height: 28,
-    borderRadius: radii.full,
     backgroundColor: colors.surface,
-    alignItems: 'center',
-    justifyContent: 'center',
+    borderRadius: radii.full,
+    paddingVertical: spacing.xs,
+    paddingHorizontal: spacing.sm + 2,
   },
-  iconWrapActive: {
+  chipLiked: {
     backgroundColor: '#FDECEA',
   },
-  icon: {
-    fontSize: 13,
+  heart: {
+    fontSize: 14,
     color: colors.textMuted,
   },
-  iconActive: {
+  heartActive: {
     color: colors.likeActive,
+  },
+  chatIcon: {
+    fontSize: 13,
   },
   count: {
     fontSize: typography.fontSizeSm,
     color: colors.textSecondary,
-    minWidth: 16,
+    fontWeight: typography.fontWeightMedium,
+  },
+  countActive: {
+    color: colors.likeActive,
   },
 });

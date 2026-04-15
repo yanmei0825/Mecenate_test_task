@@ -9,11 +9,19 @@ import { useFeed } from '../api/hooks';
 import { Post } from '../api/posts';
 import { PostCard } from '../components/PostCard';
 import { CommentSheet } from '../components/CommentSheet';
+import { TabBar } from '../components/TabBar';
 import { Button } from '../components/Button';
 import { colors, spacing, typography } from '../tokens';
 
+const TABS = [
+  { key: 'all', label: 'Все' },
+  { key: 'popular', label: 'Популярное' },
+  { key: 'subscriptions', label: 'Подписки' },
+];
+
 const FeedScreen: React.FC = observer(() => {
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
+  const [activeTab, setActiveTab] = useState('all');
 
   const {
     data, isLoading, isError, refetch,
@@ -47,6 +55,7 @@ const FeedScreen: React.FC = observer(() => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.white} />
+      <TabBar tabs={TABS} activeKey={activeTab} onChange={setActiveTab} />
       <FlatList
         data={posts}
         keyExtractor={(item) => item.id}

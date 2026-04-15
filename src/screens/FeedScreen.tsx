@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
   View, FlatList, StyleSheet, RefreshControl,
-  Text, ActivityIndicator, StatusBar,
+  Text, ActivityIndicator, StatusBar, Image,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { observer } from 'mobx-react-lite';
@@ -11,7 +11,7 @@ import { PostCard } from '../components/PostCard';
 import { CommentSheet } from '../components/CommentSheet';
 import { TabBar } from '../components/TabBar';
 import { Button } from '../components/Button';
-import { colors, spacing, typography } from '../tokens';
+import { colors, spacing, typography, radii } from '../tokens';
 
 const TABS = [
   { key: 'all', label: 'Все' },
@@ -47,9 +47,21 @@ const FeedScreen: React.FC = observer(() => {
   if (isError) {
     return (
       <SafeAreaView style={styles.container}>
+        <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
+        <View style={styles.errorAuthorRow}>
+          <Image
+            source={{ uri: 'https://i.pravatar.cc/80?img=11' }}
+            style={styles.errorAvatar}
+          />
+          <Text style={styles.errorAuthorName}>Петр Федько</Text>
+        </View>
         <View style={styles.centered}>
-          <Text style={styles.illustration}>🐙</Text>
-          <Text style={styles.stateTitle}>Не удалось загрузить публикации</Text>
+          <Image
+            source={require('../../assets/error-illustration.png')}
+            style={styles.illustration}
+            resizeMode="contain"
+          />
+          <Text style={styles.stateTitle}>Не удалось загрузить публикацию</Text>
           <Button label="Повторить" onPress={() => refetch()} style={styles.stateBtn} />
         </View>
       </SafeAreaView>
@@ -103,16 +115,41 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: spacing.xxxl,
-    minHeight: 400,
+    padding: spacing.xl,
   },
-  illustration: { fontSize: 72, marginBottom: spacing.xl },
+  // Error state
+  errorAuthorRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.lg,
+    paddingBottom: spacing.sm,
+    gap: spacing.md,
+  },
+  errorAvatar: {
+    width: 52,
+    height: 52,
+    borderRadius: radii.full,
+  },
+  errorAuthorName: {
+    fontSize: typography.fontSizeLg,
+    fontWeight: typography.fontWeightBold,
+    color: colors.textPrimary,
+  },
+  illustration: {
+    width: 180,
+    height: 180,
+    marginBottom: spacing.xl,
+  },
   stateTitle: {
-    fontSize: typography.fontSizeMd,
+    fontSize: typography.fontSizeLg,
     fontWeight: typography.fontWeightBold,
     color: colors.textPrimary,
     textAlign: 'center',
     marginBottom: spacing.xl,
   },
-  stateBtn: { minWidth: 200 },
+  stateBtn: {
+    width: '100%',
+    borderRadius: radii.full,
+  },
 });

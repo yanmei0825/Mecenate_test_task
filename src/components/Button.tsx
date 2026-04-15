@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
   base: {
     paddingVertical: spacing.sm + 2,
     paddingHorizontal: spacing.xl,
-    borderRadius: radii.md,
+    borderRadius: radii.full,
     alignItems: 'center',
     justifyContent: 'center',
     minHeight: 42,
